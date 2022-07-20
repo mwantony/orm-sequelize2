@@ -1,6 +1,6 @@
-'use strict'
+"use strict"
 module.exports = (sequelize, DataTypes) => {
-  const Pessoas = sequelize.define('Pessoas', {
+  const Pessoas = sequelize.define("Pessoas", {
     nome: DataTypes.STRING,
     ativo: DataTypes.BOOLEAN,
     email: DataTypes.STRING,
@@ -8,10 +8,10 @@ module.exports = (sequelize, DataTypes) => {
   }, {})
   Pessoas.associate = function(models) {
     Pessoas.hasMany(models.Turmas, {
-      foreignKey: 'docente_id'
+      foreignKey: "docente_id"
     }) 
     Pessoas.hasMany(models.Matriculas, {
-      foreignKey: 'estudante_id'
+      foreignKey: "estudante_id"
     })
 
   }

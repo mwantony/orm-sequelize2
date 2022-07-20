@@ -1,7 +1,7 @@
-'use strict'
+"use strict"
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Turmas', {
+    return queryInterface.createTable("Turmas", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -11,7 +11,7 @@ module.exports = {
       docente_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
-        references: { model: 'Pessoas', key: 'id'}
+        references: { model: "Pessoas", key: "id"}
       },
       data_inicio: {
         type: Sequelize.DATEONLY
@@ -19,7 +19,7 @@ module.exports = {
       nivel_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
-        references: { model: 'Niveis', key: 'id'}
+        references: { model: "Niveis", key: "id"}
       },
       createdAt: {
         allowNull: false,
@@ -32,6 +32,6 @@ module.exports = {
     })
   },
   down: (queryInterface) => {
-    return queryInterface.dropTable('Turmas')
+    return queryInterface.dropTable("Turmas")
   }
 }
