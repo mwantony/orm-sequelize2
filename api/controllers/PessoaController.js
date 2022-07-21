@@ -1,7 +1,7 @@
 /* const database = require("../models");
 const Sequelize = require("sequelize"); */
 
-const {PessoasServices} = require("../services");
+const { PessoasServices } = require("../services");
 const pessoasServices = new PessoasServices();
 
 class PessoaController {
@@ -201,20 +201,9 @@ class PessoaController {
   static async cancelaPessoa(req, res) {
     const { estudanteId } = req.params;
     try {
-      database.sequelize.transaction(async (transacao) => {
-        await pessoasServices.update(
-          { ativo: false },
-          { where: { id: Number(estudanteId) } },
-          { transaction: transacao }
-        );
-        await database.Matriculas.update(
-          { statis: "cancelado" },
-          { where: { estudante_id: Number(estudanteId) } },
-          { transaction: transacao }
-        );
-        return res.status(200).json({
-          mensagem: `matrículas ref. estudante ${estudanteId} canceladas`,
-        });
+      await pessoasServices.cancelaPessoaEMatriculas(Number(estudanteId));
+      return res.status(200).json({
+        mensagem: `matrículas ref. estudante ${estudanteId} canceladas`,
       });
     } catch (error) {
       return res.status(500).json(error.message);
