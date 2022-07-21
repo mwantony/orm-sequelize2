@@ -3,7 +3,14 @@ module.exports = (sequelize, DataTypes) => {
   const Pessoas = sequelize.define(
     "Pessoas",
     {
-      nome: DataTypes.STRING,
+      nome: {
+        type: DataTypes.STRING,
+        validate: {
+          funcaoValidadora: function(dado) {
+            if(dado.length < 3) throw new Error("o campo nome deve ter pelo menos 3 caracteres")
+          }
+        }
+      },
       ativo: DataTypes.BOOLEAN,
       email: {
         type: DataTypes.STRING,
