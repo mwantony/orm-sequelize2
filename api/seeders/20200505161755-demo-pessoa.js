@@ -49,10 +49,10 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
       }
-    ], {})
+    ], {});
   },
 
   down: (queryInterface) => {
-    return queryInterface.bulkDelete("Pessoas", null, {})
+    return queryInterface.bulkDelete("Pessoas", null, {});
   }
-}
+};

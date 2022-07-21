@@ -1,7 +1,7 @@
-const { Router } = require("express")
-const PessoaController = require("../controllers/PessoaController")
+const { Router } = require("express");
+const PessoaController = require("../controllers/PessoaController");
 
-const router = Router()
+const router = Router();
 
 router
   .get("/pessoas", PessoaController.pegaTodasAsPessoas)
@@ -15,6 +15,6 @@ router
   .put("/pessoas/:estudanteId/matricula/:matriculaId",  PessoaController.atualizaMatricula)
   .delete("/pessoas/:estudanteId/matricula/:matriculaId",  PessoaController.apagaMatricula)
   .post("/pessoas/:id/restaura", PessoaController.restauraPessoa)
-  .post("/pessoas/:estudanteId/matricula/:matriculaId/restaura", PessoaController.restauraMatricula)
+  .post("/pessoas/:estudanteId/matricula/:matriculaId/restaura", PessoaController.restauraMatricula);
 
-module.exports = router
+module.exports = router;

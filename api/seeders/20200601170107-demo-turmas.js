@@ -29,10 +29,10 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()			
       }
-    ], {})
+    ], {});
   },
 
   down: (queryInterface) => {
-    return queryInterface.bulkDelete("Turmas", null, {})
+    return queryInterface.bulkDelete("Turmas", null, {});
   }
-}
+};
