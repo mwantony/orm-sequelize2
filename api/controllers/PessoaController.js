@@ -1,10 +1,13 @@
-const database = require("../models");
-const Sequelize = require("sequelize");
+/* const database = require("../models");
+const Sequelize = require("sequelize"); */
+
+const Services = require("../services/Services");
+const pessoasServices = new Services("Pessoas");
 
 class PessoaController {
   static async pegaPessoasAtivas(req, res) {
     try {
-      const pessoasAtivas = await database.Pessoas.findAll();
+      const pessoasAtivas = await pessoasServices.pegaTodosOsRegistros();
       return res.status(200).json(pessoasAtivas);
     } catch (error) {
       return res.status(500).json(error.message);
@@ -13,7 +16,7 @@ class PessoaController {
 
   static async pegaTodasAsPessoas(req, res) {
     try {
-      const todasAsPessoas = await database.Pessoas.scope("todos").findAll();
+      const todasAsPessoas = await pessoasServices.scope("todos").pegaTodosOsRegistros();
       return res.status(200).json(todasAsPessoas);
     } catch (error) {
       return res.status(500).json(error.message);
@@ -23,7 +26,7 @@ class PessoaController {
   static async pegaUmaPessoa(req, res) {
     const { id } = req.params;
     try {
-      const umaPessoa = await database.Pessoas.findOne({
+      const umaPessoa = await pessoasServices.findOne({
         where: {
           id: Number(id),
         },
@@ -37,7 +40,7 @@ class PessoaController {
   static async criaPessoa(req, res) {
     const novaPessoa = req.body;
     try {
-      const novaPessoaCriada = await database.Pessoas.create(novaPessoa);
+      const novaPessoaCriada = await pessoasServices.create(novaPessoa);
       return res.status(200).json(novaPessoaCriada);
     } catch (error) {
       return res.status(500).json(error.message);
@@ -48,8 +51,8 @@ class PessoaController {
     const { id } = req.params;
     const novasInfos = req.body;
     try {
-      await database.Pessoas.update(novasInfos, { where: { id: Number(id) } });
-      const pessoaAtualizada = await database.Pessoas.findOne({
+      await pessoasServices.update(novasInfos, { where: { id: Number(id) } });
+      const pessoaAtualizada = await pessoasServices.findOne({
         where: { id: Number(id) },
       });
       return res.status(200).json(pessoaAtualizada);
@@ -61,7 +64,7 @@ class PessoaController {
   static async apagaPessoa(req, res) {
     const { id } = req.params;
     try {
-      await database.Pessoas.destroy({ where: { id: Number(id) } });
+      await pessoasServices.destroy({ where: { id: Number(id) } });
       return res.status(200).json({ mensagem: `id ${id} deletado` });
     } catch (error) {
       return res.status(500).json(error.message);
@@ -71,7 +74,7 @@ class PessoaController {
   static async restauraPessoa(req, res) {
     const { id } = req.params;
     try {
-      await database.Pessoas.restore({ where: { id: Number(id) } });
+      await pessoasServices.restore({ where: { id: Number(id) } });
       return res.status(200).json({ mensagem: `id ${id} restaurado` });
     } catch (error) {
       return res.status(500).json(error.message);
@@ -152,7 +155,7 @@ class PessoaController {
   static async pegaMatriculas(req, res) {
     const { estudanteId } = req.params;
     try {
-      const pessoa = await database.Pessoas.findOne({
+      const pessoa = await pessoasServices.findOne({
         where: { id: Number(estudanteId) },
       });
       const matriculas = await pessoa.getAulasMatriculadas();
@@ -199,7 +202,7 @@ class PessoaController {
     const { estudanteId } = req.params;
     try {
       database.sequelize.transaction(async (transacao) => {
-        await database.Pessoas.update(
+        await pessoasServices.update(
           { ativo: false },
           { where: { id: Number(estudanteId) } },
           { transaction: transacao }
