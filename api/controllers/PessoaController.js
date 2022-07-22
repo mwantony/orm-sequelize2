@@ -1,8 +1,9 @@
-/* const database = require("../models");
-const Sequelize = require("sequelize"); */
+const database = require("../models");
+const Sequelize = require("sequelize");
 
-const { PessoasServices } = require("../services");
+const { PessoasServices, MatriculasServices } = require("../services");
 const pessoasServices = new PessoasServices();
+const matriculasServices = new MatriculasServices();
 
 class PessoaController {
   static async pegaPessoasAtivas(req, res) {
@@ -40,7 +41,7 @@ class PessoaController {
   static async criaPessoa(req, res) {
     const novaPessoa = req.body;
     try {
-      const novaPessoaCriada = await pessoasServices.create(novaPessoa);
+      const novaPessoaCriada = await pessoasServices.criaRegistro(novaPessoa);
       return res.status(200).json(novaPessoaCriada);
     } catch (error) {
       return res.status(500).json(error.message);
@@ -51,10 +52,8 @@ class PessoaController {
     const { id } = req.params;
     const novasInfos = req.body;
     try {
-      await pessoasServices.update(novasInfos, { where: { id: Number(id) } });
-      const pessoaAtualizada = await pessoasServices.findOne({
-        where: { id: Number(id) },
-      });
+      await pessoasServices.atualizaRegistro(novasInfos, id);
+      const pessoaAtualizada = await pessoasServices.pegaUmRegistro(id);
       return res.status(200).json(pessoaAtualizada);
     } catch (error) {
       return res.status(500).json(error.message);
@@ -64,7 +63,7 @@ class PessoaController {
   static async apagaPessoa(req, res) {
     const { id } = req.params;
     try {
-      await pessoasServices.destroy({ where: { id: Number(id) } });
+      await pessoasServices.apagaRegistro(id);
       return res.status(200).json({ mensagem: `id ${id} deletado` });
     } catch (error) {
       return res.status(500).json(error.message);
@@ -74,7 +73,7 @@ class PessoaController {
   static async restauraPessoa(req, res) {
     const { id } = req.params;
     try {
-      await pessoasServices.restore({ where: { id: Number(id) } });
+      await pessoasServices.restauraRegistro(id);
       return res.status(200).json({ mensagem: `id ${id} restaurado` });
     } catch (error) {
       return res.status(500).json(error.message);
@@ -84,12 +83,10 @@ class PessoaController {
   static async pegaUmaMatricula(req, res) {
     const { estudanteId, matriculaId } = req.params;
     try {
-      const umaMatricula = await database.Matriculas.findOne({
-        where: {
-          id: Number(matriculaId),
-          estudante_id: Number(estudanteId),
-        },
-      });
+      const umaMatricula = await matriculasServices.pegaMatricula(
+        matriculaId,
+        estudanteId
+      );
       return res.status(200).json(umaMatricula);
     } catch (error) {
       return res.status(500).json(error.message);
